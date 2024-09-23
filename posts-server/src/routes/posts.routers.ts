@@ -1,8 +1,6 @@
 import express from "express";
-import commentRouter from "./comments.routes";
-
+import { postPost } from "../controllers/post.controllers";
 const routers = express.Router();
-
-routers.use("/posts", commentRouter);
+routers.post("/", postPost);
 
 export default routers;

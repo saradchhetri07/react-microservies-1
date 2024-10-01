@@ -3,13 +3,12 @@ import { Request, Response, NextFunction } from "express";
 interface Comment {
   commentId: string;
   content: string;
-  postId: string;
 }
 
 interface Post {
-  postId: string;
-  title: string;
-  comments?: [Comment];
+  postId?: string;
+  title?: string;
+  comments?: Comment[];
 }
 
 export const eventController = async (
@@ -19,27 +18,26 @@ export const eventController = async (
 ) => {
   try {
     const { type, data } = req.body;
-    const Post = {};
+    let Posts: Post[];
 
+    console.log(`came to post the event`, type, data);
     if (type === "PostCreated") {
-      const { postId, title } = data;
-      Post[postId] = {
+      const { postId, title } = data.postId;
+      Posts[postId] = {
         postId,
         title,
+        comments: [],
       };
     } else if (type === "CommentCreated") {
       const { postId, content, id } = data;
-      const comments = Post[postId].comments || [];
+      const comments = Posts[postId].comments || [];
       comments.push({ commentId: id, content });
-      Post[postId].comments = comments;
-    } else if (type === "CommentUpdated") {
-      const { postId, content, id } = data;
-      const comments = Post[postId].comments || [];
-      const comment = comments.find((comment) => comment.commentId === id);
-      comment.content = content;
+      Posts[postId].comments = comments;
     }
-    console.log(Post);
+    console.log(Posts);
 
-    return res.status(200).json({ Post });
-  } catch (error) {}
+    return res.send(200).json({ Posts });
+  } catch (error) {
+    console.log(`gotten error is`, error);
+  }
 };

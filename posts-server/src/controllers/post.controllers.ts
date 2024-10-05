@@ -18,9 +18,7 @@ export const postPost = async (
       title,
     };
 
-    console.log(`came to post the post`, posts);
-
-    await axios.post("http://localhost:4004/events", {
+    await axios.post("http://event-bus-srv:4004/events", {
       type: "PostCreated",
       data: {
         postId: {
@@ -29,7 +27,6 @@ export const postPost = async (
         },
       },
     });
-    console.log(`gone past the post created`);
 
     return res.status(200).send(posts);
   } catch (error) {

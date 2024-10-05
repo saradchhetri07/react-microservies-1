@@ -16,7 +16,7 @@ export const postComments = async (
 
     comments.push({ id: commentId, content: content });
     commentsByPostId[postId] = comments;
-    await axios.post("http://localhost:4004/events", {
+    await axios.post("http://event-bus-srv:4004/events", {
       type: "CommentCreated",
       data: {
         id: commentId,
